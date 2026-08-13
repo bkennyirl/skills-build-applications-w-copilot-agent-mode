@@ -1,0 +1,1 @@
+{"version":3,"file":"workoutRoutes.js","sourceRoot":"","sources":["../../src/routes/workoutRoutes.ts"],"names":[],"mappings":";;AAAA,qCAAiC;AACjC,wEAI0C;AAE1C,MAAM,aAAa,GAAG,IAAA,gBAAM,GAAE,CAAC;AAE/B,aAAa,CAAC,GAAG,CAAC,GAAG,EAAE,gCAAY,CAAC,CAAC;AACrC,aAAa,CAAC,IAAI,CAAC,GAAG,EAAE,iCAAa,CAAC,CAAC;AACvC,aAAa,CAAC,GAAG,CAAC,sBAAsB,EAAE,yCAAqB,CAAC,CAAC;kBAElD,aAAa"}

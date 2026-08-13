@@ -5,6 +5,16 @@ import Teams from './components/Teams'
 import Users from './components/Users'
 import Workouts from './components/Workouts'
 
+function getCodespaceNameFromHost() {
+  if (typeof window === 'undefined') {
+    return ''
+  }
+
+  const host = window.location.hostname
+  const match = host.match(/^([a-z0-9-]+)-\d+\.app\.github\.dev$/i)
+  return match?.[1] || ''
+}
+
 function normalizeCollectionResponse(payload) {
   if (Array.isArray(payload)) {
     return payload
@@ -34,7 +44,9 @@ function normalizeCollectionResponse(payload) {
 }
 
 function App() {
-  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+  const envCodespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+  const inferredCodespaceName = getCodespaceNameFromHost()
+  const codespaceName = envCodespaceName || inferredCodespaceName
   const apiBaseUrl = codespaceName
     ? `https://${codespaceName}-8000.app.github.dev/api`
     : 'http://localhost:8000/api'
