@@ -7,7 +7,6 @@ import Users from './Users'
 import Workouts from './Workouts'
 
 const normalize = (payload) => (Array.isArray(payload) ? payload : [])
-const apiBaseUrl = 'https://codespace-name-8000.app.github.dev/api'
 
 const componentCases = [
   ['activities', Activities, '/activities/'],
@@ -30,13 +29,15 @@ describe('component API endpoints', () => {
 
     vi.stubGlobal('fetch', fetchMock)
 
-    render(<Component apiBaseUrl={apiBaseUrl} normalizeCollectionResponse={normalize} />)
+    render(<Component normalizeCollectionResponse={normalize} />)
 
     await waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledWith(
-        `${apiBaseUrl}${path}`,
-        expect.objectContaining({ signal: expect.any(AbortSignal) }),
-      )
+      expect(fetchMock).toHaveBeenCalledTimes(1)
     })
+
+    const [url, options] = fetchMock.mock.calls[0]
+    expect(url).toMatch(new RegExp(`${path}$`))
+    expect(url).toContain('/api')
+    expect(options).toEqual(expect.objectContaining({ signal: expect.any(AbortSignal) }))
   })
 })

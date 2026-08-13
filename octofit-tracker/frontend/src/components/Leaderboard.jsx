@@ -28,12 +28,10 @@ function defaultNormalizeCollectionResponse(payload) {
   return []
 }
 
-function Leaderboard({ apiBaseUrl, normalizeCollectionResponse }) {
-  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
-  const resolvedApiBaseUrl = apiBaseUrl || (codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev/api`
-    : 'http://localhost:8000/api')
-  const endpoint = `${resolvedApiBaseUrl}/leaderboard/`
+function Leaderboard({ normalizeCollectionResponse }) {
+  const endpoint = import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`
+    : 'http://localhost:8000/api/leaderboard/'
   const normalize = normalizeCollectionResponse || defaultNormalizeCollectionResponse
 
   const [entries, setEntries] = useState([])

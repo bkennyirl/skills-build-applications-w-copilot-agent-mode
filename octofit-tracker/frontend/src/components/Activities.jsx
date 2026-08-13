@@ -28,12 +28,10 @@ function defaultNormalizeCollectionResponse(payload) {
   return []
 }
 
-function Activities({ apiBaseUrl, normalizeCollectionResponse }) {
-  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
-  const resolvedApiBaseUrl = apiBaseUrl || (codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev/api`
-    : 'http://localhost:8000/api')
-  const endpoint = `${resolvedApiBaseUrl}/activities/`
+function Activities({ normalizeCollectionResponse }) {
+  const endpoint = import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/activities/`
+    : 'http://localhost:8000/api/activities/'
   const normalize = normalizeCollectionResponse || defaultNormalizeCollectionResponse
 
   const [activities, setActivities] = useState([])

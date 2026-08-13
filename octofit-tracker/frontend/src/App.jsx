@@ -85,23 +85,23 @@ function App() {
       <Routes>
         <Route
           path="/users"
-          element={<Users apiBaseUrl={apiBaseUrl} normalizeCollectionResponse={normalizeCollectionResponse} />}
+          element={<Users normalizeCollectionResponse={normalizeCollectionResponse} />}
         />
         <Route
           path="/activities"
-          element={<Activities apiBaseUrl={apiBaseUrl} normalizeCollectionResponse={normalizeCollectionResponse} />}
+          element={<Activities normalizeCollectionResponse={normalizeCollectionResponse} />}
         />
         <Route
           path="/teams"
-          element={<Teams apiBaseUrl={apiBaseUrl} normalizeCollectionResponse={normalizeCollectionResponse} />}
+          element={<Teams normalizeCollectionResponse={normalizeCollectionResponse} />}
         />
         <Route
           path="/leaderboard"
-          element={<Leaderboard apiBaseUrl={apiBaseUrl} normalizeCollectionResponse={normalizeCollectionResponse} />}
+          element={<Leaderboard normalizeCollectionResponse={normalizeCollectionResponse} />}
         />
         <Route
           path="/workouts"
-          element={<Workouts apiBaseUrl={apiBaseUrl} normalizeCollectionResponse={normalizeCollectionResponse} />}
+          element={<Workouts normalizeCollectionResponse={normalizeCollectionResponse} />}
         />
         <Route path="*" element={<Navigate to="/users" replace />} />
       </Routes>
