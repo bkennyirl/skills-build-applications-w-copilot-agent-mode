@@ -1,6 +1,41 @@
 import { useEffect, useState } from 'react'
 
+function defaultNormalizeCollectionResponse(payload) {
+  if (Array.isArray(payload)) {
+    return payload
+  }
+
+  if (!payload || typeof payload !== 'object') {
+    return []
+  }
+
+  const listKeys = ['results', 'items', 'data', 'docs', 'rows', 'entries', 'suggestions']
+
+  for (const key of listKeys) {
+    if (Array.isArray(payload[key])) {
+      return payload[key]
+    }
+  }
+
+  if (payload.data && typeof payload.data === 'object') {
+    for (const key of listKeys) {
+      if (Array.isArray(payload.data[key])) {
+        return payload.data[key]
+      }
+    }
+  }
+
+  return []
+}
+
 function Users({ apiBaseUrl, normalizeCollectionResponse }) {
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+  const resolvedApiBaseUrl = apiBaseUrl || (codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api`
+    : 'http://localhost:8000/api')
+  const endpoint = `${resolvedApiBaseUrl}/users/`
+  const normalize = normalizeCollectionResponse || defaultNormalizeCollectionResponse
+
   const [users, setUsers] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -13,7 +48,7 @@ function Users({ apiBaseUrl, normalizeCollectionResponse }) {
         setIsLoading(true)
         setError('')
 
-        const response = await fetch(`${apiBaseUrl}/users/`, {
+        const response = await fetch(endpoint, {
           signal: controller.signal,
         })
 
@@ -22,7 +57,7 @@ function Users({ apiBaseUrl, normalizeCollectionResponse }) {
         }
 
         const payload = await response.json()
-        setUsers(normalizeCollectionResponse(payload))
+        setUsers(normalize(payload))
       } catch (requestError) {
         if (requestError.name !== 'AbortError') {
           setError(requestError.message || 'Unable to load users')
@@ -35,12 +70,12 @@ function Users({ apiBaseUrl, normalizeCollectionResponse }) {
     loadUsers()
 
     return () => controller.abort()
-  }, [apiBaseUrl, normalizeCollectionResponse])
+  }, [endpoint, normalize])
 
   return (
     <section>
       <h2 className="h4">Users</h2>
-      <p className="text-body-secondary mb-3">GET {apiBaseUrl}/users/</p>
+      <p className="text-body-secondary mb-3">GET {endpoint}</p>
 
       {isLoading && <div className="alert alert-info">Loading users...</div>}
       {error && <div className="alert alert-danger">{error}</div>}
